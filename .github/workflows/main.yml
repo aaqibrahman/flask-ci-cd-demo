@@ -1,0 +1,35 @@
+name: My CI/CD Robot
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get my code
+      uses: actions/checkout@v3
+
+    - name: Get Python ready
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install tools
+      run: |
+        pip install -r requirements.txt
+        pip install pytest
+
+    - name: Run tests
+      run: pytest
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Deploy to Render (you’ll do it once on the website)
+      run: echo "Render will auto-deploy this"
